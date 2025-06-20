@@ -1,5 +1,6 @@
 package com.example.proyecto_bibloteca
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -34,7 +35,17 @@ class LibrosActivity : AppCompatActivity() {
             mostrarLibros("", tituloInput.text.toString())
         }
 
+        // Mostrar todos al inicio
         mostrarLibros("", "")
+
+        // Botón cerrar sesión
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
+        btnCerrarSesion.setOnClickListener {
+            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
 
     private fun mostrarLibros(autor: String, titulo: String) {
@@ -52,3 +63,4 @@ class LibrosActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 }
+

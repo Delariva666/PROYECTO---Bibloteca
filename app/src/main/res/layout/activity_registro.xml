@@ -1,37 +1,74 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="Registro de Alumno"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/etCorreoRegistro"
-        android:hint="Correo institucional"
-        android:inputType="textEmailAddress"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etContrasenaRegistro"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"/>
+        <TextView
+            android:text="Registro de Alumno"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/btnGuardarRegistro"
-        android:text="Guardar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
-</LinearLayout>
+        <EditText
+            android:id="@+id/etIdAlumno"
+            android:hint="ID del Alumno"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:hint="Nombre Completo"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etSemestre"
+            android:hint="Semestre"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etCorreoRegistro"
+            android:hint="Correo Institucional"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/etContrasenaRegistro"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+
+        <Button
+            android:id="@+id/btnGuardarRegistro"
+            android:text="Guardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"/>
+
+        <ImageView
+            android:id="@+id/imagenLogo"
+            android:src="@drawable/uaa_logo"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="Logo Biblioteca" />
+    </LinearLayout>
+</ScrollView>

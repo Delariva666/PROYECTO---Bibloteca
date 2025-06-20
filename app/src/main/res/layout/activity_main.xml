@@ -80,12 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/etAdminId"
-            android:hint="ID Administrador"
-            android:inputType="text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
 
         <EditText
             android:id="@+id/etContrasena2"

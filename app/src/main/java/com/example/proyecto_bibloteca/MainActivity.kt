@@ -9,6 +9,8 @@ import com.example.proyecto_bibloteca.data.SQLiteHelper
 class MainActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: SQLiteHelper
+    private val CONTRASENA_ADMIN = "admin123"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         val etCorreo = findViewById<EditText>(R.id.etCorreo)
         val etContrasena = findViewById<EditText>(R.id.etContrasena)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+
+        val etContrasena2 = findViewById<EditText>(R.id.etContrasena2)
+        val btnLogin2 = findViewById<Button>(R.id.btnLogin2)
 
         val btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
         btnRegistrar.setOnClickListener {
@@ -45,6 +50,21 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+        }
+
+        btnLogin2.setOnClickListener {
+            val contrasenaAdmin = etContrasena2.text.toString().trim()
+
+            if (contrasenaAdmin == CONTRASENA_ADMIN) {
+                Toast.makeText(this, "Bienvenido administrador", Toast.LENGTH_SHORT).show()
+
+                // Redirige a pantalla del administrador
+                val intent = Intent(this, AdminHomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

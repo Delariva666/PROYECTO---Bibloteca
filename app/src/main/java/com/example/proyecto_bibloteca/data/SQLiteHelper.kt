@@ -9,13 +9,15 @@ import com.example.proyecto_bibloteca.Libro // Asegúrate de que la ruta a Libro
 import com.example.proyecto_bibloteca.R
 
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 3) {
+class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 4) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val createTableEstudiantes = """
             CREATE TABLE Estudiantes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                correo TEXT NOT NULL,
+                id INTEGER PRIMARY KEY,
+                nombre TEXT NOT NULL,
+                semestre INTEGER NOT NULL,
+                correo TEXT UNIQUE NOT NULL,
                 contraseña TEXT NOT NULL
             )
         """.trimIndent()
@@ -85,12 +87,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
             db.insert("Libros", null, insertLibro)
         }
 
-        // Estudiante de prueba
-        val insert = ContentValues().apply {
-            put("correo", "alumno@alumnos.uaa.mx")
-            put("contraseña", "1234")
-        }
-        db.insert("Estudiantes", null, insert)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -99,22 +96,27 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
         onCreate(db)
     }
 
-    fun insertarEstudiante(correo: String, contraseña: String): Boolean {
+    fun insertarEstudianteCompleto(id: String, nombre: String, semestre: String, correo: String, contraseña: String): Boolean {
         val db = writableDatabase
-        val cursor = db.rawQuery("SELECT * FROM Estudiantes WHERE correo = ?", arrayOf(correo))
+
+        val cursor = db.rawQuery("SELECT * FROM Estudiantes WHERE correo = ? OR id = ?", arrayOf(correo, id))
         if (cursor.count > 0) {
             cursor.close()
-            return false
+            return false // ya existe
         }
-        cursor.close()
 
+        cursor.close()
         val values = ContentValues().apply {
+            put("id", id.toInt())
+            put("nombre", nombre)
+            put("semestre", semestre.toInt())
             put("correo", correo)
             put("contraseña", contraseña)
         }
         val resultado = db.insert("Estudiantes", null, values)
         return resultado != -1L
     }
+
 
     fun validarEstudiante(correo: String, contraseña: String): Boolean {
         val db = this.readableDatabase

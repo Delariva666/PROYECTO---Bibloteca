@@ -30,6 +30,9 @@
         <!-- Pantalla para el alumno ya logueado -->
         <activity android:name=".HomeEstudianteActivity" />
 
+        <activity android:name=".AdminHomeActivity" android:exported="true"/>
+
+
     </application>
 
 </manifest>

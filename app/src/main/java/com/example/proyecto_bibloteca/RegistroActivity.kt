@@ -1,6 +1,5 @@
 package com.example.proyecto_bibloteca
 
-
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,25 +15,32 @@ class RegistroActivity : AppCompatActivity() {
 
         dbHelper = SQLiteHelper(this)
 
+        val etId = findViewById<EditText>(R.id.etIdAlumno)
+        val etNombre = findViewById<EditText>(R.id.etNombre)
+        val etSemestre = findViewById<EditText>(R.id.etSemestre)
         val etCorreo = findViewById<EditText>(R.id.etCorreoRegistro)
         val etContrasena = findViewById<EditText>(R.id.etContrasenaRegistro)
         val btnGuardar = findViewById<Button>(R.id.btnGuardarRegistro)
 
         btnGuardar.setOnClickListener {
+            val id = etId.text.toString().trim()
+            val nombre = etNombre.text.toString().trim()
+            val semestre = etSemestre.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
-            val contraseña = etContrasena.text.toString().trim()
+            val contrasena = etContrasena.text.toString().trim()
 
-            if (correo.isEmpty() || contraseña.isEmpty()) {
-                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
+            if (id.isEmpty() || nombre.isEmpty() || semestre.isEmpty() || correo.isEmpty() || contrasena.isEmpty()) {
+                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             } else {
-                val exito = dbHelper.insertarEstudiante(correo, contraseña)
+                val exito = dbHelper.insertarEstudianteCompleto(id, nombre, semestre, correo, contrasena)
                 if (exito) {
                     Toast.makeText(this, "Alumno registrado correctamente", Toast.LENGTH_SHORT).show()
-                    finish() // cerrar pantalla
+                    finish()
                 } else {
-                    Toast.makeText(this, "Error: ya existe ese alumno", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error: ya existe ese alumno o correo", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 }
+

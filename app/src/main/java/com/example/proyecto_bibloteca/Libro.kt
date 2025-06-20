@@ -1,4 +1,10 @@
 package com.example.proyecto_bibloteca
 
-class Libro {
-}
+data class Libro(
+    val id: Int,
+    val titulo: String,
+    val autor: String,
+    var estado: String,
+    val imagen: Int
+)
+

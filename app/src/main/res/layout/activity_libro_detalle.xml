@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/detalleImagen"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen del libro" />
+
+        <TextView
+            android:id="@+id/detalleTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingTop="12dp" />
+
+        <TextView
+            android:id="@+id/detalleAutor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autor:" />
+
+        <TextView
+            android:id="@+id/detallePaginas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Páginas:" />
+
+        <TextView
+            android:id="@+id/detalleIdioma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Idioma:" />
+
+        <TextView
+            android:id="@+id/detalleAnio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Año:" />
+
+        <TextView
+            android:id="@+id/detalleSinopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sinopsis:"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp" />
+
+        <Button
+            android:id="@+id/btnRegresar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Regresar"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
+</ScrollView>
+

@@ -9,7 +9,7 @@ import com.example.proyecto_bibloteca.Libro // Asegúrate de que la ruta a Libro
 import com.example.proyecto_bibloteca.R
 
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 4) {
+class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 5) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val createTableEstudiantes = """
@@ -29,7 +29,11 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
                 titulo TEXT NOT NULL,
                 autor TEXT NOT NULL,
                 estado TEXT NOT NULL,
-                imagen INTEGER NOT NULL
+                imagen INTEGER NOT NULL,
+                paginas INTEGER,
+                idioma TEXT,
+                anio INTEGER,
+                sinopsis TEXT
             )
         """.trimIndent()
         db.execSQL(createTableLibros)
@@ -83,9 +87,14 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
                 put("autor", autor)
                 put("estado", "Disponible")
                 put("imagen", imagen)
+                put("paginas", 200) // valor por defecto
+                put("idioma", "Español")
+                put("anio", 2000)
+                put("sinopsis", "Sinopsis no disponible.")
             }
             db.insert("Libros", null, insertLibro)
         }
+
 
 
     }
@@ -147,17 +156,22 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
         val cursor = db.rawQuery(query, args.toTypedArray())
         while (cursor.moveToNext()) {
             val libro = Libro(
-                id = cursor.getInt(0),
-                titulo = cursor.getString(1),
-                autor = cursor.getString(2),
-                estado = cursor.getString(3),
-                imagen = cursor.getInt(4)
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo")),
+                autor = cursor.getString(cursor.getColumnIndexOrThrow("autor")),
+                estado = cursor.getString(cursor.getColumnIndexOrThrow("estado")),
+                imagen = cursor.getInt(cursor.getColumnIndexOrThrow("imagen")),
+                paginas = cursor.getColumnIndex("paginas").let { if (it >= 0) cursor.getInt(it) else null },
+                idioma = cursor.getColumnIndex("idioma").let { if (it >= 0) cursor.getString(it) else null },
+                anio = cursor.getColumnIndex("anio").let { if (it >= 0) cursor.getInt(it) else null },
+                sinopsis = cursor.getColumnIndex("sinopsis").let { if (it >= 0) cursor.getString(it) else null }
             )
             lista.add(libro)
         }
         cursor.close()
         return lista
     }
+
 
     fun reservarLibro(id: Int) {
         val db = writableDatabase

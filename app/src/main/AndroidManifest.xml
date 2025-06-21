@@ -31,6 +31,8 @@
         <activity android:name=".HomeEstudianteActivity" />
 
         <activity android:name=".AdminHomeActivity" android:exported="true"/>
+        <activity android:name=".LibroDetalleActivity" />
+
 
 
     </application>

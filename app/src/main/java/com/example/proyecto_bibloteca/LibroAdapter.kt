@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import android.content.Intent
 import com.example.proyecto_bibloteca.Libro
 
 class LibroAdapter(
@@ -34,7 +35,21 @@ class LibroAdapter(
 
         holder.reservar.isEnabled = libro.estado == "Disponible"
         holder.reservar.setOnClickListener { reservarCallback(libro) }
-        holder.detalles.setOnClickListener { detallesCallback(libro) }
+        holder.detalles.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, LibroDetalleActivity::class.java).apply {
+                putExtra("titulo", libro.titulo)
+                putExtra("autor", libro.autor)
+                putExtra("estado", libro.estado)
+                putExtra("imagen", libro.imagen)
+                putExtra("paginas", libro.paginas ?: 0)
+                putExtra("idioma", libro.idioma ?: "No disponible")
+                putExtra("anio", libro.anio ?: 0)
+                putExtra("sinopsis", libro.sinopsis ?: "Sin sinopsis")
+            }
+            context.startActivity(intent)
+        }
+
     }
 
     override fun getItemCount(): Int = libros.size

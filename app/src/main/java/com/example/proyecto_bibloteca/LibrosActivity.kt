@@ -1,67 +1,67 @@
-package com.example.proyecto_bibloteca
+    package com.example.proyecto_bibloteca
 
-import android.content.Intent
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.proyecto_bibloteca.data.SQLiteHelper
+    import android.content.Intent
+    import android.os.Bundle
+    import android.widget.Button
+    import android.widget.EditText
+    import android.widget.Toast
+    import androidx.appcompat.app.AppCompatActivity
+    import androidx.recyclerview.widget.LinearLayoutManager
+    import androidx.recyclerview.widget.RecyclerView
+    import com.example.proyecto_bibloteca.data.SQLiteHelper
 
-class LibrosActivity : AppCompatActivity() {
-    private lateinit var dbHelper: SQLiteHelper
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var autorInput: EditText
-    private lateinit var tituloInput: EditText
+    class LibrosActivity : AppCompatActivity() {
+        private lateinit var dbHelper: SQLiteHelper
+        private lateinit var recyclerView: RecyclerView
+        private lateinit var autorInput: EditText
+        private lateinit var tituloInput: EditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home_estudiante)
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_home_estudiante)
 
-        dbHelper = SQLiteHelper(this)
-        recyclerView = findViewById(R.id.librosRecycler)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+            dbHelper = SQLiteHelper(this)
+            recyclerView = findViewById(R.id.librosRecycler)
+            recyclerView.layoutManager = LinearLayoutManager(this)
 
-        autorInput = findViewById(R.id.autorInput)
-        tituloInput = findViewById(R.id.tituloInput)
+            autorInput = findViewById(R.id.autorInput)
+            tituloInput = findViewById(R.id.tituloInput)
 
-        findViewById<Button>(R.id.buscarAutor).setOnClickListener {
-            mostrarLibros(autorInput.text.toString(), "")
+            findViewById<Button>(R.id.buscarAutor).setOnClickListener {
+                mostrarLibros(autorInput.text.toString(), "")
+            }
+
+            findViewById<Button>(R.id.buscarTitulo).setOnClickListener {
+                mostrarLibros("", tituloInput.text.toString())
+            }
+
+            // Mostrar todos al inicio
+            mostrarLibros("", "")
+
+            // Botón cerrar sesión
+            val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
+            btnCerrarSesion.setOnClickListener {
+                Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
         }
 
-        findViewById<Button>(R.id.buscarTitulo).setOnClickListener {
-            mostrarLibros("", tituloInput.text.toString())
-        }
+        private fun mostrarLibros(autor: String, titulo: String) {
+            val libros = dbHelper.buscarLibros(autor, titulo)
 
-        // Mostrar todos al inicio
-        mostrarLibros("", "")
+            val adapter = LibroAdapter(libros,
+                reservarCallback = {
+                    dbHelper.reservarLibro(it.id)
+                    mostrarLibros(autor, titulo)
+                },
+                detallesCallback = {
+                    Toast.makeText(this, "Autor: ${it.autor}", Toast.LENGTH_SHORT).show()
+                })
 
-        // Botón cerrar sesión
-        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
-        btnCerrarSesion.setOnClickListener {
-            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
+            recyclerView.adapter = adapter
         }
     }
-
-    private fun mostrarLibros(autor: String, titulo: String) {
-        val libros = dbHelper.buscarLibros(autor, titulo)
-
-        val adapter = LibroAdapter(libros,
-            reservarCallback = {
-                dbHelper.reservarLibro(it.id)
-                mostrarLibros(autor, titulo)
-            },
-            detallesCallback = {
-                Toast.makeText(this, "Autor: ${it.autor}", Toast.LENGTH_SHORT).show()
-            })
-
-        recyclerView.adapter = adapter
-    }
-}
 

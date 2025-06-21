@@ -66,5 +66,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
             }
         }
+        etCorreo.text.clear()
+        etContrasena.text.clear()
+        etContrasena2.text.clear()
+
     }
 }

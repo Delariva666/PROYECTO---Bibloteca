@@ -1,6 +1,7 @@
 package com.example.proyecto_bibloteca.data
 
 import android.content.Context
+import android.util.Log
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
@@ -10,7 +11,7 @@ import com.example.proyecto_bibloteca.R
 import com.example.proyecto_bibloteca.Reservacion
 
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 6) {
+class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 99) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val createTableEstudiantes = """
@@ -114,6 +115,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS Estudiantes")
         db.execSQL("DROP TABLE IF EXISTS Libros")
+        db.execSQL("DROP TABLE IF EXISTS Reservaciones")
         onCreate(db)
     }
 
@@ -190,7 +192,9 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
         val values = ContentValues().apply {
             put("estado", "No Disponible")
         }
-        db.update("Libros", values, "id = ?", arrayOf(id.toString()))
+        val filas = db.update("Libros", values, "id = ?", arrayOf(id.toString()))
+
+        Log.d("SQLiteHelper", "Intento de actualizar estado del libro ID $id → Filas afectadas: $filas")
     }
 
     fun insertarReservacion(nombre: String, dias: String, ubicacion: String, hora: String): Boolean {

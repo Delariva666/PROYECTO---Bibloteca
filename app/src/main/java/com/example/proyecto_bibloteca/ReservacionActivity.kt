@@ -2,6 +2,8 @@ package com.example.proyecto_bibloteca
 
 import android.os.Bundle
 import android.widget.*
+import android.content.Intent
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecto_bibloteca.data.SQLiteHelper
 
@@ -14,6 +16,10 @@ class ReservacionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reservacion)
 
         dbHelper = SQLiteHelper(this)
+        val libroId = intent.getIntExtra("idLibro", -1)
+
+        // ✅ Aquí agregas el Log para verificar qué recibiste
+        Log.d("ReservacionActivity", "Libro ID recibido: $libroId")
 
         val etNombreEstudiante = findViewById<EditText>(R.id.etNombreEstudiante)
         val etNombreLibro = findViewById<EditText>(R.id.etNombreLibro)
@@ -37,14 +43,26 @@ class ReservacionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
             } else {
                 val resultado = dbHelper.insertarReservacion("$estudiante - $libro", dias, ubicacion, hora)
-                if (resultado) {
+                val libroId = intent.getIntExtra("idLibro", -1)
+
+                if (resultado && libroId != -1) {
+                    dbHelper.reservarLibro(libroId)
+
                     Toast.makeText(this, "Reservación guardada", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this, HomeEstudianteActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                     finish()
+
+                } else if (libroId == -1) {
+                    Toast.makeText(this, "Error: ID del libro no recibido", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
     }
 }
 

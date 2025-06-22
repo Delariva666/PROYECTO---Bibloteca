@@ -19,6 +19,8 @@ class HomeEstudianteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_estudiante)
 
+
+
         // Inicializar base de datos y componentes
         dbHelper = SQLiteHelper(this)
         recyclerView = findViewById(R.id.librosRecycler)
@@ -49,6 +51,11 @@ class HomeEstudianteActivity : AppCompatActivity() {
             startActivity(intent)
             finish() // Cierra esta actividad para no volver con "atrás"
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mostrarLibros("", "") // 👈 Esto se ejecuta al volver desde ReservacionActivity
     }
 
     // Mostrar libros según filtros (autor, título)

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Intent
+import android.util.Log
 import com.example.proyecto_bibloteca.Libro
 import com.example.proyecto_bibloteca.data.SQLiteHelper
 
@@ -41,6 +42,7 @@ class LibroAdapter(
             val intent = Intent(context, ReservacionActivity::class.java)
             intent.putExtra("titulo", libro.titulo)
             intent.putExtra("autor", libro.autor)
+            intent.putExtra("idLibro", libro.id)
             context.startActivity(intent)
         }
 
@@ -66,6 +68,7 @@ class LibroAdapter(
             val context = holder.itemView.context
             val intent = Intent(context, LibroDetalleActivity::class.java).apply {
                 putExtra("titulo", libro.titulo)
+                putExtra("idLibro", libro.id)
                 putExtra("autor", libro.autor)
                 putExtra("estado", libro.estado)
                 putExtra("imagen", libro.imagen)
@@ -75,6 +78,7 @@ class LibroAdapter(
                 putExtra("sinopsis", libro.sinopsis ?: "Sin sinopsis")
             }
             context.startActivity(intent)
+            Log.d("LibroAdapter", "Reservando libro: ${libro.titulo} con ID: ${libro.id}")
         }
 
 

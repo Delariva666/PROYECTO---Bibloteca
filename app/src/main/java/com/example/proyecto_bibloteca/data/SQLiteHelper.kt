@@ -7,9 +7,10 @@ import android.content.ContentValues
 import android.database.Cursor
 import com.example.proyecto_bibloteca.Libro // Asegúrate de que la ruta a Libro sea correcta
 import com.example.proyecto_bibloteca.R
+import com.example.proyecto_bibloteca.Reservacion
 
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 5) {
+class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB", null, 6) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val createTableEstudiantes = """
@@ -80,6 +81,17 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
             Triple("El jardín secreto", "Frances Hodgson Burnett", R.drawable.secreto),
             Triple("La ladrona de libros", "Markus Zusak", R.drawable.ladrona),
         )
+
+        val createTableReservaciones = """
+    CREATE TABLE Reservaciones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        dias TEXT NOT NULL,
+        ubicacion TEXT NOT NULL,
+        hora TEXT NOT NULL
+    )
+""".trimIndent()
+        db.execSQL(createTableReservaciones)
 
         for ((titulo, autor, imagen) in libros) {
             val insertLibro = ContentValues().apply {
@@ -179,5 +191,43 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
             put("estado", "No Disponible")
         }
         db.update("Libros", values, "id = ?", arrayOf(id.toString()))
+    }
+
+    fun insertarReservacion(nombre: String, dias: String, ubicacion: String, hora: String): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("nombre", nombre)
+            put("dias", dias)
+            put("ubicacion", ubicacion)
+            put("hora", hora)
+        }
+        val resultado = db.insert("Reservaciones", null, values)
+        return resultado != -1L
+    }
+
+    fun eliminarReservacionPorNombre(nombre: String): Boolean {
+        val db = writableDatabase
+        val result = db.delete("Reservaciones", "nombre=?", arrayOf(nombre))
+        return result > 0
+    }
+
+
+    fun obtenerReservacionPorLibro(nombreLibro: String): Reservacion? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM Reservaciones WHERE nombre LIKE ?", arrayOf("%$nombreLibro%"))
+
+        return if (cursor.moveToFirst()) {
+            val reservacion = Reservacion(
+                nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                dias = cursor.getString(cursor.getColumnIndexOrThrow("dias")),
+                ubicacion = cursor.getString(cursor.getColumnIndexOrThrow("ubicacion")),
+                hora = cursor.getString(cursor.getColumnIndexOrThrow("hora"))
+            )
+            cursor.close()
+            reservacion
+        } else {
+            cursor.close()
+            null
+        }
     }
 }

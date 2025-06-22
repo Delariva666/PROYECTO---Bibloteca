@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import android.content.Intent
 import com.example.proyecto_bibloteca.Libro
+import com.example.proyecto_bibloteca.data.SQLiteHelper
 
 class LibroAdapter(
     private val libros: List<Libro>,
@@ -20,6 +21,7 @@ class LibroAdapter(
         val estado: TextView = view.findViewById(R.id.libroEstado)
         val reservar: Button = view.findViewById(R.id.btnReservar)
         val detalles: Button = view.findViewById(R.id.btnDetalles)
+        val info: Button = view.findViewById(R.id.btnInfo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibroViewHolder {
@@ -34,7 +36,32 @@ class LibroAdapter(
         holder.estado.text = "Estado: ${libro.estado}"
 
         holder.reservar.isEnabled = libro.estado == "Disponible"
-        holder.reservar.setOnClickListener { reservarCallback(libro) }
+        holder.reservar.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, ReservacionActivity::class.java)
+            intent.putExtra("titulo", libro.titulo)
+            intent.putExtra("autor", libro.autor)
+            context.startActivity(intent)
+        }
+
+        holder.info.setOnClickListener {
+            val context = holder.itemView.context
+            val dbHelper = SQLiteHelper(context)
+            val reservacion = dbHelper.obtenerReservacionPorLibro(libro.titulo)
+
+            if (reservacion != null) {
+                val intent = Intent(context, ReservacionInfoActivity::class.java).apply {
+                    putExtra("nombre", reservacion.nombre)
+                    putExtra("dias", reservacion.dias)
+                    putExtra("ubicacion", reservacion.ubicacion)
+                    putExtra("hora", reservacion.hora)
+                }
+                context.startActivity(intent)
+            } else {
+                Toast.makeText(context, "No hay reservación para este libro", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         holder.detalles.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, LibroDetalleActivity::class.java).apply {
@@ -49,6 +76,7 @@ class LibroAdapter(
             }
             context.startActivity(intent)
         }
+
 
     }
 

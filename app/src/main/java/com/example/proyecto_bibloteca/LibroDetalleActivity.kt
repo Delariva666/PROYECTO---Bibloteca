@@ -39,6 +39,12 @@ class LibroDetalleActivity : AppCompatActivity() {
             finish() // opcional, por si no quieres que regrese con "Back"
         }
 
+        val btnReservar = findViewById<Button>(R.id.btnReservar)
+        btnReservar.setOnClickListener {
+            val intent = Intent(this, ReservacionActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 }

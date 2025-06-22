@@ -32,6 +32,8 @@
 
         <activity android:name=".AdminHomeActivity" android:exported="true"/>
         <activity android:name=".LibroDetalleActivity" />
+        <activity android:name=".ReservacionActivity" />
+        <activity android:name=".ReservacionInfoActivity" />
 
 
 

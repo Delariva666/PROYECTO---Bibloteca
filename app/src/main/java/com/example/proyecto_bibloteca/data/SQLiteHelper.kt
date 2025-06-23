@@ -215,6 +215,15 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
         return result > 0
     }
 
+    fun liberarLibro(id: Int) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("estado", "Disponible")
+        }
+        db.update("Libros", values, "id = ?", arrayOf(id.toString()))
+    }
+
+
 
     fun obtenerReservacionPorLibro(nombreLibro: String): Reservacion? {
         val db = readableDatabase
@@ -233,5 +242,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "BibliotecaDB",
             cursor.close()
             null
         }
+
+
     }
 }

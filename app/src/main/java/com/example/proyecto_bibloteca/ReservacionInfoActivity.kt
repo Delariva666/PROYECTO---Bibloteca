@@ -24,6 +24,7 @@ class ReservacionInfoActivity : AppCompatActivity() {
         val tvHora = findViewById<TextView>(R.id.tvHora)
         val btnEliminar = findViewById<Button>(R.id.btnEliminar)
         val btnRegresar = findViewById<Button>(R.id.btnRegresar2)
+        val idLibro = intent.getIntExtra("idLibro", -1)
 
         // Recibir info desde el intent
         val nombre = intent.getStringExtra("nombre") ?: ""
@@ -38,8 +39,12 @@ class ReservacionInfoActivity : AppCompatActivity() {
 
         btnEliminar.setOnClickListener {
             val eliminado = dbHelper.eliminarReservacionPorNombre(nombre)
+
             if (eliminado) {
-                Toast.makeText(this, "Reservación eliminada", Toast.LENGTH_SHORT).show()
+                if (idLibro != -1) {
+                    dbHelper.liberarLibro(idLibro) // ✅ cambiar estado a Disponible
+                }
+                Toast.makeText(this, "Reservación cancelada", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()

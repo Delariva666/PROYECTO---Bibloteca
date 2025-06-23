@@ -57,6 +57,7 @@ class LibroAdapter(
                     putExtra("dias", reservacion.dias)
                     putExtra("ubicacion", reservacion.ubicacion)
                     putExtra("hora", reservacion.hora)
+                    putExtra("idLibro", libro.id)
                 }
                 context.startActivity(intent)
             } else {
